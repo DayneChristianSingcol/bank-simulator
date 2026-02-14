@@ -1,26 +1,80 @@
 namespace ATMApp.Services
 {
-    public static class BankingServices
+    public class BankingServices
+{
+    private double balance;
+    private double lastTransAmt;
+
+    public BankingServices(ref double balance, ref double lastTransAmt)
     {
-        // Option 1: Pass-by-value
-        public static double GetBalance(double balance)
-        {
-            return balance;
-        }
+        this.balance = balance;
+        this.lastTransAmt = lastTransAmt;
+    }
 
-        // Option 2: ref (Deposit)
-        public static bool Deposit(ref double balance, double amount)
-        {
-            return false; //placeholder return value, replace with actual implementation
-        }
+    // Check Balance
+    public void CheckBalance()
+    {
+        Console.WriteLine($"Current Balance: ₱{balance}");
+    }
 
-        // Option 3: ref + out (Withdraw)
-        public static void Withdraw(
-            ref double balance,
-            double amount,
-            out bool isSuccessful)
+    // Deposit Money 
+    public bool Deposit()
+{
+    Console.Write("Enter amount to deposit: ");
+    
+    if (double.TryParse(Console.ReadLine(), out double depositAmount) && depositAmount > 0)
+    {
+        // Successful deposit
+        balance += depositAmount;
+        lastTransAmt = depositAmount;
+        Console.WriteLine($"Deposit successful. Updated Balance: ₱{balance}");
+        
+        return true; // Deposit successful
+    }
+    else
+    {
+        // Invalid deposit amount
+        Console.WriteLine("Invalid deposit amount. Please enter a positive value.");
+        
+        return false; // Deposit failed
+    }
+}
+
+public void Withdraw()
+{
+    Console.Write("Enter amount to withdraw: ");
+    if (double.TryParse(Console.ReadLine(), out double withdrawAmount) && withdrawAmount > 0)
+    {
+        if (balance >= withdrawAmount)
         {
-            isSuccessful = false; //placeholder value, replace with actual implementation
+            balance -= withdrawAmount;
+            lastTransAmt = -withdrawAmount;
+            Console.WriteLine($"Withdrawal successful. Updated Balance: ₱{balance}");
+        }
+        else
+        {
+            Console.WriteLine("Withdrawal failed. Insufficient balance.");
         }
     }
+    else
+    {
+        Console.WriteLine("Invalid withdrawal amount. Please enter a positive value.");
+    }
+}
+
+    // Show Mini Statement
+    public void ShowMiniStatement()
+    {
+        Console.WriteLine("--- Mini Statement ---");
+        Console.WriteLine($"Current Balance: ₱{balance}");
+        Console.WriteLine($"Last Transaction Amount: ₱{lastTransAmt}");
+    }
+
+    // Exit the ATM System
+    public void Exit()
+    {
+        Console.WriteLine("Thank you for using the ATM. Goodbye!");
+    }
+}
+
 }
