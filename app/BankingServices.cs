@@ -2,25 +2,46 @@ namespace ATMApp.Services
 {
     public static class BankingServices
     {
-        // Option 1: Pass-by-value
         public static double GetBalance(double balance)
         {
             return balance;
         }
 
-        // Option 2: ref (Deposit)
         public static bool Deposit(ref double balance, double amount)
         {
-            return false; //placeholder return value, replace with actual implementation
+            if (amount > 0)
+            {
+                balance += amount;
+                Console.WriteLine($"Deposit successful. Updated Balance: ₱{balance}");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Invalid deposit amount. Please enter a positive value.");
+                return false;
+            }
         }
 
-        // Option 3: ref + out (Withdraw)
-        public static void Withdraw(
-            ref double balance,
-            double amount,
-            out bool isSuccessful)
+        public static void Withdraw(ref double balance, double amount, out bool isSuccessful)
         {
-            isSuccessful = false; //placeholder value, replace with actual implementation
+            if (amount > 0 && balance >= amount)
+            {
+                balance -= amount;
+                isSuccessful = true;
+                Console.WriteLine($"Withdrawal successful. Updated Balance: ₱{balance}");
+            }
+            else
+            {
+                isSuccessful = false;
+                if (amount <= 0)
+                {
+                    Console.WriteLine("Invalid withdrawal amount. Please enter a positive value.");
+                }
+                else
+                {
+                    Console.WriteLine("Withdrawal failed. Insufficient balance.");
+                }
+            }
         }
     }
 }
